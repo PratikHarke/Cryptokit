@@ -1,6 +1,6 @@
 # ⬡ CryptoKit
 
-[![CI](https://github.com/PratikHarke/cryptokit/actions/workflows/ci.yml/badge.svg)](https://github.com/PratikHarke/cryptokit/actions/workflows/ci.yml)
+[![CI](https://github.com/PratikHarke/Cryptokit/actions/workflows/ci.yml/badge.svg)](https://github.com/PratikHarke/Cryptokit/actions/workflows/ci.yml)
 
 CryptoKit is a privacy-first browser-based CTF and security analysis workbench for decoding, transforming, inspecting, and solving encoded payloads locally.
 
