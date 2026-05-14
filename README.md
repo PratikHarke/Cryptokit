@@ -26,11 +26,12 @@ CryptoKit was built to provide a privacy-first alternative that performs analysi
 ### Smart Solver
 ![Smart Solver](./screenshots/smart-solver.png)
 
-### File Analyzer
-![File Analyzer](./screenshots/file-analyzer.png)
-
 ### Manual Pipeline
 ![Manual Pipeline](./screenshots/manual-pipeline.png)
+
+### Manual Pipeline-2
+![Manual Pipeline-2](./screenshots/manual-pipeline2.png)
+
 
 ---
 
