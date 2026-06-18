@@ -50,6 +50,8 @@ export function urlDecode(text) {
 export function hexToBase64(hex) {
   try {
     const clean = hex.replace(/\s+/g, "");
+    if (!clean || !/^[0-9a-fA-F]+$/.test(clean) || clean.length % 2 !== 0)
+      return "Invalid hex";
     const bytes = clean.match(/.{2}/g).map(b => parseInt(b, 16));
     return btoa(bytes.map(b => String.fromCharCode(b)).join(""));
   } catch { return "Invalid hex"; }
@@ -72,15 +74,16 @@ export function detectFormat(text) {
   if (/^[01\s]+$/.test(t) && t.replace(/\s/g, "").length % 8 === 0 && t.replace(/\s/g, "").length > 0)
     return "binary";
 
+  // Decimal bytes (space/comma separated, all 0-255) — check BEFORE hex
+  // because "72 101 108" strips to valid hex digits but is really decimal
+  const decParts = t.split(/[\s,]+/);
+  if (decParts.length > 1 && decParts.every(p => /^\d+$/.test(p) && Number(p) <= 255))
+    return "decimal";
+
   // Pure hex (with or without spaces)
   const hexClean = t.replace(/\s/g, "");
   if (/^[0-9a-fA-F]+$/.test(hexClean) && hexClean.length % 2 === 0 && hexClean.length >= 2)
     return "hex";
-
-  // Decimal bytes (space/comma separated, all 0-255)
-  const decParts = t.split(/[\s,]+/);
-  if (decParts.length > 1 && decParts.every(p => /^\d+$/.test(p) && Number(p) <= 255))
-    return "decimal";
 
   // URL encoded
   if (/%[0-9a-fA-F]{2}/.test(t)) return "url";

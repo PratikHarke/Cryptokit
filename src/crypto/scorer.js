@@ -173,11 +173,15 @@ function icSubScore(text) {
 export function score(text, original = '') {
   if (!text) return nullReport();
 
-  const wScore  = wordSubScore(text);
-  const tScore  = tokenWordScore(text);
-  const pScore  = printableSubScore(text);
-  const cScore  = chiSubScore(text);
-  const iScore  = icSubScore(text);
+  // Truncate to 2000 chars for all sub-scores — text quality is determined
+  // by a sample; processing 50k+ chars via includes() is O(n×WORD_LIST).
+  const sample = text.length > 2000 ? text.slice(0, 2000) : text;
+
+  const wScore  = wordSubScore(sample);
+  const tScore  = tokenWordScore(sample);
+  const pScore  = printableSubScore(sample);
+  const cScore  = chiSubScore(sample);
+  const iScore  = icSubScore(sample);
   const hasFlag = /flag\{[^}]+\}/i.test(text) || /ctf\{[^}]+\}/i.test(text) ||
                   /[a-z_]{2,20}\{[^}]+\}/i.test(text);
 
