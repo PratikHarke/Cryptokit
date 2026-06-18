@@ -67,7 +67,7 @@ function generateMarkdown({ title, category, difficulty, tags, notes, flag, entr
   lines.push(
     `---`,
     ``,
-    `*Generated with [CryptoKit](https://github.com/cryptokit) — privacy-first CTF crypto, ` +
+    `*Generated with [CryptoKit](https://github.com/PratikHarke/Cryptokit) — privacy-first CTF crypto, ` +
     `encoding, hash, and forensic analysis workbench.*`,
   );
 
