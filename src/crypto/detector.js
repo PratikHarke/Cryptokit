@@ -394,8 +394,16 @@ const RULES = [
  * @param {string} input
  * @returns {DetectionCandidate[]}  Sorted descending by confidence
  */
+const DETECT_MAX_BYTES = 200_000; // 200 KB hard cap — prevents main-thread freeze on adversarial input
+
 export function detect(input) {
   if (!input?.trim()) return [];
+  // Defensive size cap — UI enforces 50 KB, but guard direct callers too
+  if (new TextEncoder().encode(input).length > DETECT_MAX_BYTES) {
+    return [{ toolId: 'converter', label: 'Input too large for auto-detection',
+      category: 'Error', confidence: 0,
+      note: 'Truncate to < 200 KB or use File Analyzer for large payloads.' }];
+  }
 
   const raw = [];
   for (const rule of RULES) {
