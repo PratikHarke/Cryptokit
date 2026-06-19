@@ -139,6 +139,6 @@ Issues and PRs welcome. For security vulnerabilities, see [SECURITY.md](SECURITY
 
 <div align="center">
 
-Built by [Pratik Harke](https://github.com/PratikHarke) · [LinkedIn](https://linkedin.com/in/pratikharke) · Bug bounty hunter · r4gn4r
+Built by [Pratik Harke](https://github.com/PratikHarke) · [LinkedIn](https://www.linkedin.com/in/pratik-harke-b60782293/) · Bug bounty hunter · r4gn4r
 
 </div>
