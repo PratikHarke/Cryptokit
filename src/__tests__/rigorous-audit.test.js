@@ -554,13 +554,10 @@ describe("Converters — hex↔base64", () => {
     expect(base64ToHex("SGVsbG8=")).toBe("48 65 6c 6c 6f");
   });
 
-  // BUG-02: Silent NaN corruption — 'ZZZZ' is invalid hex but returns 'AAA=' instead of error
-  it("[BUG-02] hexToBase64 silently accepts invalid hex chars — 'ZZZZ' returns 'AAA=' instead of error", () => {
-    const result = hexToBase64("ZZZZ");
-    // Current behavior: returns 'AAA=' (corrupt output — 0x00 0x00 from NaN)
-    // Expected behavior: should return an error string
-    expect(result).toBe("AAA="); // documenting actual (buggy) behavior
-    // FIX NEEDED: add validation: /^[0-9a-fA-F]*$/.test(clean) before processing
+  it("hexToBase64 rejects invalid hex chars — 'ZZZZ' returns error (was: silent NaN→null corruption)", () => {
+    // Previously: parseInt('ZZ',16)=NaN → String.fromCharCode(NaN)='\x00' → 'AAA=' (corrupt)
+    // Fixed: now validates input is hex before processing
+    expect(hexToBase64("ZZZZ")).toMatch(/Invalid/);
   });
 });
 
@@ -583,12 +580,11 @@ describe("detectFormat — priority and edge cases", () => {
   it("detects ascii for plain text", () => expect(detectFormat("hello world")).toBe("ascii"));
   it("returns empty for empty string", () => expect(detectFormat("")).toBe("empty"));
 
-  // BUG-03: Decimal bytes detected as hex — concatenating "72 101 108" → "72101108"
-  // which is all valid hex digits and even length, so hex wins over decimal.
-  it("[BUG-03] '72 101 108 108 111' detected as 'hex' instead of 'decimal'", () => {
-    // Current (buggy) behavior — decimal bytes with overlapping hex charset are misclassified
-    expect(detectFormat("72 101 108 108 111")).toBe("hex");
-    // FIX NEEDED: check decimal bytes BEFORE hex, or require ≥1 value > 0x0F in the set
+  it("'72 101 108 108 111' correctly detected as 'decimal' (was: misclassified as 'hex')", () => {
+    // Previously: hex check ran before decimal check; stripping spaces gave '72101108108111'
+    // which passed /^[0-9a-fA-F]+$/ (all digits are valid hex) → wrongly returned 'hex'
+    // Fixed: decimal-bytes check now runs before hex check
+    expect(detectFormat("72 101 108 108 111")).toBe("decimal");
   });
 
   it("single byte 'ff' detected as hex (correct)", () => {
