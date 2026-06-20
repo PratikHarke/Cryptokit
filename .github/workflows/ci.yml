@@ -21,16 +21,14 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install dependencies (clean install)
+      - name: Install dependencies
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test:run -- --reporter=verbose
-        # Fails build if ANY test fails (vitest exits non-zero)
+        run: node node_modules/vitest/vitest.mjs run --reporter=verbose
 
       - name: Build
         run: npm run build
-        # Fails build if Vite build errors
         env:
           NODE_ENV: production
 
